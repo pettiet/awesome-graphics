@@ -9,6 +9,7 @@
     margin: 0; height: 100%; background: #0b0b10; overflow: hidden;
     touch-action: none; -webkit-user-select: none; user-select: none; -webkit-touch-callout: none;
   }
+  * { touch-action: none; }
   body {
     display: flex; flex-direction: column; align-items: center; justify-content: center;
     font-family: "Courier New", Courier, monospace;
@@ -496,6 +497,10 @@ window.addEventListener('pointermove', function (e) {
 });
 window.addEventListener('blur', function () { ptrs = {}; keyL = keyR = false; refreshSteer(); });
 window.addEventListener('contextmenu', function (e) { e.preventDefault(); });
+/* iPhone Safari ignores the no-zoom viewport setting, so block double-tap and pinch zoom by hand */
+['touchstart', 'touchmove', 'touchend', 'gesturestart', 'gesturechange', 'gestureend', 'dblclick'].forEach(function (ev) {
+  document.addEventListener(ev, function (e) { if (e.cancelable) e.preventDefault(); }, { passive: false });
+});
 window.addEventListener('keydown', function (e) {
   initAudio();
   var k = e.key;
